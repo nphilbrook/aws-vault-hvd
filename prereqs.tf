@@ -15,13 +15,19 @@ resource "aws_kms_key" "unseal" {
   deletion_window_in_days = 20
 }
 
+# Because Secrets Manager secrets stick around in pending deletion state.action "
+# On a full destroy/recreate these will change
+resource "random_id" "secret_suffix" {
+  byte_length = 4
+}
+
 # LICENSE
 resource "aws_secretsmanager_secret" "vault_license" {
-  name        = "vault-license"
+  name        = "vault-license-${random_id.secret_suffix.hex}"
   description = "Raw contents of the VAULT license file stored as a string."
 
   tags = merge(
-    { Name = "vault-license" },
+    { Name = "vault-license-${random_id.secret_suffix.hex}" },
     local.common_tags
   )
 }
@@ -35,11 +41,11 @@ resource "aws_secretsmanager_secret_version" "vault_license" {
 # TLS Certificate (PEM format, base64-encoded)
 #------------------------------------------------------------------------------
 resource "aws_secretsmanager_secret" "vault_tls_cert" {
-  name        = "vault-cert"
+  name        = "vault-cert-${random_id.secret_suffix.hex}"
   description = "Base64-encoded string value of VAULT TLS certificate in PEM format."
 
   tags = merge(
-    { Name = "vault-cert" },
+    { Name = "vault-cert-${random_id.secret_suffix.hex}" },
     local.common_tags
   )
 }
@@ -53,16 +59,16 @@ resource "aws_secretsmanager_secret_version" "vault_tls_cert" {
 # TLS Private Key (PEM format, base64-encoded)
 #------------------------------------------------------------------------------
 resource "aws_secretsmanager_secret" "vault_tls_privkey" {
-  name        = "vault-privkey"
+  name        = "vault-privkey-${random_id.secret_suffix.hex}"
   description = "Base64-encoded string value of VAULT TLS private key in PEM format."
 
   tags = merge(
-    { Name = "vault-privkey" },
+    { Name = "vault-privkey-${random_id.secret_suffix.hex}" },
     local.common_tags
   )
 }
 
 resource "aws_secretsmanager_secret_version" "vault_tls_privkey" {
-  secret_id     = aws_secretsmanager_secret.vault_tls_privkey.id
+  secret_id     = "${aws_secretsmanager_secret.vault_tls_privkey.id}-${random_id.secret_suffix.id}"
   secret_string = module.cert.tls_privkey_base64
 }
