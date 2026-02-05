@@ -24,4 +24,8 @@ data "aws_subnets" "vault_subnets" {
     name   = "vpc-id"
     values = [local.vpc_id]
   }
+  filter {
+    name   = "tag:Name"
+    values = ["*private*"]
+  }
 }
