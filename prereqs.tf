@@ -38,11 +38,11 @@ resource "aws_secretsmanager_secret_version" "vault_license" {
 }
 
 #------------------------------------------------------------------------------
-# TLS Certificate (PEM format, base64-encoded)
+# TLS Certificate (PEM format)
 #------------------------------------------------------------------------------
 resource "aws_secretsmanager_secret" "vault_tls_cert" {
   name        = "vault-cert-${random_id.secret_suffix.hex}"
-  description = "Base64-encoded string value of VAULT TLS certificate in PEM format."
+  description = "string value of VAULT TLS certificate in PEM format."
 
   tags = merge(
     { Name = "vault-cert-${random_id.secret_suffix.hex}" },
@@ -52,15 +52,15 @@ resource "aws_secretsmanager_secret" "vault_tls_cert" {
 
 resource "aws_secretsmanager_secret_version" "vault_tls_cert" {
   secret_id     = aws_secretsmanager_secret.vault_tls_cert.id
-  secret_string = module.cert.tls_fullchain_base64
+  secret_string = base64decode(module.cert.tls_fullchain_base64)
 }
 
 #------------------------------------------------------------------------------
-# TLS Private Key (PEM format, base64-encoded)
+# TLS Private Key (PEM format)
 #------------------------------------------------------------------------------
 resource "aws_secretsmanager_secret" "vault_tls_privkey" {
   name        = "vault-privkey-${random_id.secret_suffix.hex}"
-  description = "Base64-encoded string value of VAULT TLS private key in PEM format."
+  description = "string value of VAULT TLS private key in PEM format."
 
   tags = merge(
     { Name = "vault-privkey-${random_id.secret_suffix.hex}" },
@@ -70,5 +70,5 @@ resource "aws_secretsmanager_secret" "vault_tls_privkey" {
 
 resource "aws_secretsmanager_secret_version" "vault_tls_privkey" {
   secret_id     = aws_secretsmanager_secret.vault_tls_privkey.id
-  secret_string = module.cert.tls_privkey_base64
+  secret_string = base64decode(module.cert.tls_privkey_base64)
 }
