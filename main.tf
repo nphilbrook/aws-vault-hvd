@@ -19,6 +19,9 @@ module "vault_hvd_primary" {
   net_ingress_vault_security_group_ids = ["sg-097db6b701058a37b"]
   net_ingress_ssh_security_group_ids   = ["sg-097db6b701058a37b"]
 
+  net_ingress_vault_cidr_blocks = ["1.2.3.0/24"]
+  net_ingress_ssh_cidr_blocks   = ["1.2.3.0/24"]
+
   #------------------------------------------------------------------------------
   # AWS Secrets Manager installation secrets and AWS KMS unseal key
   #------------------------------------------------------------------------------
