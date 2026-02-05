@@ -69,6 +69,6 @@ resource "aws_secretsmanager_secret" "vault_tls_privkey" {
 }
 
 resource "aws_secretsmanager_secret_version" "vault_tls_privkey" {
-  secret_id     = "${aws_secretsmanager_secret.vault_tls_privkey.id}-${random_id.secret_suffix.id}"
+  secret_id     = aws_secretsmanager_secret.vault_tls_privkey.id
   secret_string = module.cert.tls_privkey_base64
 }
