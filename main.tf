@@ -9,18 +9,17 @@ module "vault_hvd_primary" {
   #------------------------------------------------------------------------------
   # Networking
   #------------------------------------------------------------------------------
-
-  # Ideally pull these in from tfe-hvd outputs but :shrug:
   net_vpc_id            = local.vpc_id
   load_balancing_scheme = "INTERNAL"
   net_vault_subnet_ids  = data.aws_subnets.vault_subnets.ids
   net_lb_subnet_ids     = data.aws_subnets.vault_subnets.ids
 
-  net_ingress_vault_security_group_ids = ["sg-097db6b701058a37b"]
-  net_ingress_ssh_security_group_ids   = ["sg-097db6b701058a37b"]
+  net_ingress_vault_security_group_ids = [local.bastion_security_group]
+  net_ingress_ssh_security_group_ids   = [local.bastion_security_group]
 
-  net_ingress_vault_cidr_blocks = ["1.2.3.0/24"]
-  net_ingress_ssh_cidr_blocks   = ["1.2.3.0/24"]
+  create_route53_vault_dns_record      = true
+  route53_vault_hosted_zone_name       = local.r53_zone
+  route53_vault_hosted_zone_is_private = true
 
   #------------------------------------------------------------------------------
   # AWS Secrets Manager installation secrets and AWS KMS unseal key
@@ -34,7 +33,7 @@ module "vault_hvd_primary" {
   #------------------------------------------------------------------------------
   # Compute
   #------------------------------------------------------------------------------
-  vm_key_pair_name = "acme-w2"
+  vm_key_pair_name = local.key_pair_name
   vm_instance_type = "t3a.medium"
   asg_node_count   = 6
 }
