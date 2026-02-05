@@ -21,6 +21,5 @@ locals {
   r53_zone = "nick-philbrook.sbx.hashidemos.io"
   # ngw_cidrs = [for ip in module.prereqs.ngw_public_ips : "${ip}/32"]
 
-  new_friendly_name_prefix = "new"
-  new_vpc_cidr             = "10.9.0.0/16"
+  vpc_id = "vpc-0a81d8ce35b989c3d"
 }
