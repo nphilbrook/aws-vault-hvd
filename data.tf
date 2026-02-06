@@ -19,7 +19,7 @@ data "aws_iam_session_context" "human" {
   arn = "arn:aws:sts::590184029125:assumed-role/aws_nick.philbrook_test-developer/nick.philbrook@hashicorp.com"
 }
 
-data "aws_subnets" "vault_subnets" {
+data "aws_subnets" "private_subnets" {
   filter {
     name   = "vpc-id"
     values = [local.vpc_id]
@@ -27,5 +27,16 @@ data "aws_subnets" "vault_subnets" {
   filter {
     name   = "tag:Name"
     values = ["*private*"]
+  }
+}
+
+data "aws_subnets" "public_subnets" {
+  filter {
+    name   = "vpc-id"
+    values = [local.vpc_id]
+  }
+  filter {
+    name   = "tag:Name"
+    values = ["*public*"]
   }
 }
