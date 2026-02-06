@@ -5,7 +5,8 @@ module "vault_hvd_primary" {
   #------------------------------------------------------------------------------
   friendly_name_prefix = "vault"
   vault_fqdn           = local.vault_fqdn
-  vault_version        = "1.21.3+ent"
+  # later
+  # vault_version        = "1.21.3+ent"
 
   #------------------------------------------------------------------------------
   # Networking
