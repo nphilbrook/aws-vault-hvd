@@ -5,6 +5,7 @@ module "vault_hvd_primary" {
   #------------------------------------------------------------------------------
   friendly_name_prefix = "vault"
   vault_fqdn           = local.vault_fqdn
+  vault_version        = "1.21.3+ent"
 
   #------------------------------------------------------------------------------
   # Networking
@@ -16,6 +17,7 @@ module "vault_hvd_primary" {
 
   net_ingress_vault_security_group_ids = [local.bastion_security_group]
   net_ingress_ssh_security_group_ids   = [local.bastion_security_group]
+  net_ingress_lb_security_group_ids    = [local.bastion_security_group]
 
   create_route53_vault_dns_record      = true
   route53_vault_hosted_zone_name       = local.r53_zone
