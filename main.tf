@@ -21,7 +21,7 @@ module "vault_hvd_primary" {
   net_ingress_lb_security_group_ids    = [local.bastion_security_group]
 
   create_route53_vault_dns_record      = true
-  # route53_vault_hosted_zone_name       = local.r53_zone
+  route53_vault_hosted_zone_name       = local.r53_zone
   route53_vault_hosted_zone_is_private = true
 
   #------------------------------------------------------------------------------
