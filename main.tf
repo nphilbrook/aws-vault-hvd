@@ -12,7 +12,7 @@ module "vault_hvd_primary" {
   # Networking
   #------------------------------------------------------------------------------
   net_vpc_id            = local.vpc_id
-  load_balancing_scheme = "NONE"
+  load_balancing_scheme = "INTERNAL"
   net_vault_subnet_ids  = data.aws_subnets.private_subnets.ids
   net_lb_subnet_ids     = data.aws_subnets.private_subnets.ids
 
