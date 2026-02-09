@@ -41,9 +41,9 @@ module "vault_hvd_primary" {
   asg_node_count   = 6
 
   depends_on = [
-    aws_secretsmanager_secret.vault_license,
-    aws_secretsmanager_secret.vault_tls_cert,
-    aws_secretsmanager_secret.vault_tls_privkey,
+    aws_secretsmanager_secret_version.vault_license,
+    aws_secretsmanager_secret_version.vault_tls_cert,
+    aws_secretsmanager_secret_version.vault_tls_privkey,
     aws_kms_key.unseal
   ]
 }
@@ -91,9 +91,9 @@ module "vault_hvd_public_private" {
   asg_node_count   = 3
 
   depends_on = [
-    aws_secretsmanager_secret.vault_license,
-    aws_secretsmanager_secret.vault_tls_cert,
-    aws_secretsmanager_secret.vault_tls_privkey,
+    aws_secretsmanager_secret_version.vault_license,
+    aws_secretsmanager_secret_version.vault_tls_cert,
+    aws_secretsmanager_secret_version.vault_tls_privkey,
     aws_kms_key.unseal
   ]
 }
@@ -141,9 +141,9 @@ module "vault_hvd_public_public" {
   asg_node_count   = 6
 
   depends_on = [
-    aws_secretsmanager_secret.vault_license,
-    aws_secretsmanager_secret.vault_tls_cert,
-    aws_secretsmanager_secret.vault_tls_privkey,
+    aws_secretsmanager_secret_version.vault_license,
+    aws_secretsmanager_secret_version.vault_tls_cert,
+    aws_secretsmanager_secret_version.vault_tls_privkey,
     aws_kms_key.unseal
   ]
 }
