@@ -12,7 +12,7 @@ module "vault_hvd_primary" {
   # Networking
   #------------------------------------------------------------------------------
   net_vpc_id            = local.vpc_id
-  load_balancing_scheme = "INTERNAL"
+  load_balancing_scheme = "NONE"
   net_vault_subnet_ids  = data.aws_subnets.private_subnets.ids
   net_lb_subnet_ids     = data.aws_subnets.private_subnets.ids
 
@@ -39,6 +39,13 @@ module "vault_hvd_primary" {
   vm_key_pair_name = local.key_pair_name
   vm_instance_type = "t3a.medium"
   asg_node_count   = 6
+
+  depends_on = [
+    aws_secretsmanager_secret_version.vault_license,
+    aws_secretsmanager_secret_version.vault_tls_cert,
+    aws_secretsmanager_secret_version.vault_tls_privkey,
+    aws_kms_key.unseal
+  ]
 }
 
 module "vault_hvd_public_private" {
@@ -82,6 +89,13 @@ module "vault_hvd_public_private" {
   vm_key_pair_name = local.key_pair_name
   vm_instance_type = "t3a.medium"
   asg_node_count   = 3
+
+  depends_on = [
+    aws_secretsmanager_secret_version.vault_license,
+    aws_secretsmanager_secret_version.vault_tls_cert,
+    aws_secretsmanager_secret_version.vault_tls_privkey,
+    aws_kms_key.unseal
+  ]
 }
 
 module "vault_hvd_public_public" {
@@ -125,4 +139,11 @@ module "vault_hvd_public_public" {
   vm_key_pair_name = local.key_pair_name
   vm_instance_type = "t3a.medium"
   asg_node_count   = 6
+
+  depends_on = [
+    aws_secretsmanager_secret_version.vault_license,
+    aws_secretsmanager_secret_version.vault_tls_cert,
+    aws_secretsmanager_secret_version.vault_tls_privkey,
+    aws_kms_key.unseal
+  ]
 }
