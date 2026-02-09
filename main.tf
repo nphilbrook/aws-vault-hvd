@@ -3,7 +3,7 @@ module "vault_hvd_primary" {
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
-  friendly_name_prefix = "vault"
+  friendly_name_prefix = "vault5"
   vault_fqdn           = local.vault_fqdn
   # later
   # vault_version        = "1.21.3+ent"
@@ -46,7 +46,7 @@ module "vault_hvd_public_private" {
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
-  friendly_name_prefix = "vault-pub-priv"
+  friendly_name_prefix = "vault5-pub-priv"
   vault_fqdn           = local.vault_whatever
   # later
   # vault_version        = "1.21.3+ent"
@@ -89,7 +89,7 @@ module "vault_hvd_public_public" {
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
-  friendly_name_prefix = "vault-pub-pub"
+  friendly_name_prefix = "vault5-pub-pub"
   vault_fqdn           = local.vault_foo
   # later
   # vault_version        = "1.21.3+ent"
