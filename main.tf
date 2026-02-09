@@ -17,8 +17,10 @@ module "vault_hvd_primary" {
   net_lb_subnet_ids     = data.aws_subnets.private_subnets.ids
 
   net_ingress_vault_security_group_ids = [local.bastion_security_group]
-  net_ingress_ssh_security_group_ids   = [local.bastion_security_group]
-  net_ingress_lb_security_group_ids    = [local.bastion_security_group]
+  net_ingress_vault_cidr_blocks        = ["10.9.0.0/16"]
+
+  net_ingress_ssh_security_group_ids = [local.bastion_security_group]
+  net_ingress_lb_security_group_ids  = [local.bastion_security_group]
 
   create_route53_vault_dns_record      = true
   route53_vault_hosted_zone_name       = local.r53_zone
