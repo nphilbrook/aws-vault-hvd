@@ -3,7 +3,7 @@ terraform {
     organization = "philbrook"
 
     workspaces {
-      name = "aws-vault-hvd"
+      name = "aws-vault-hvd-abc"
     }
   }
 }
