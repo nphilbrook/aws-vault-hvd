@@ -18,6 +18,7 @@ module "vault_hvd_primary" {
 
   net_ingress_vault_security_group_ids = [local.bastion_security_group]
   net_ingress_vault_cidr_blocks        = [local.vpc_cidr]
+  net_ingress_ssh_cidr_blocks          = [local.vpc_cidr]
 
   net_ingress_ssh_security_group_ids = [local.bastion_security_group]
   # net_ingress_lb_security_group_ids  = [local.bastion_security_group]
@@ -71,6 +72,7 @@ module "vault_hvd_public_private" {
   net_ingress_vault_security_group_ids = [local.bastion_security_group]
   net_ingress_vault_cidr_blocks        = [local.vpc_cidr]
   net_ingress_ssh_security_group_ids   = [local.bastion_security_group]
+  net_ingress_ssh_cidr_blocks          = [local.vpc_cidr]
   # net_ingress_lb_cidr_blocks           = ["71.168.85.118/32"]
 
   create_route53_vault_dns_record      = true
