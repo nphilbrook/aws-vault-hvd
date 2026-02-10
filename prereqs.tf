@@ -15,7 +15,7 @@ resource "aws_kms_key" "unseal" {
   deletion_window_in_days = 20
 }
 
-# Because Secrets Manager secrets stick around in pending deletion state.action "
+# Because Secrets Manager secrets stick around in pending deletion state
 # On a full destroy/recreate these will change
 resource "random_id" "secret_suffix" {
   byte_length = 4
