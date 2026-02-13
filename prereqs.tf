@@ -1,5 +1,5 @@
 module "cert" {
-  source        = "git@github.com:hashicorp-services/terraform-acme-tls-aws?ref=main"
+  source        = "git@github.com:hashicorp-services/terraform-acme-tls-aws?ref=23a11ad3959ba50172770da92625f80497db1bc2"
   tls_cert_fqdn = local.vault_fqdn
   tls_cert_sans = [
     local.vault_primary_fqdn, local.vault_dr, local.vault_pr,

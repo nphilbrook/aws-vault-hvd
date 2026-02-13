@@ -11,7 +11,7 @@ terraform {
     # }
     acme = {
       source  = "vancluever/acme"
-      version = "~>2.23"
+      version = "2.43.0"
     }
     # local = {
     #   source  = "hashicorp/local"
