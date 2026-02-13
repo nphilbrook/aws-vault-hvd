@@ -39,7 +39,7 @@ module "vault_hvd_primary" {
   #------------------------------------------------------------------------------
   vm_key_pair_name = local.key_pair_name
   vm_instance_type = "t3a.medium"
-  asg_node_count   = 6
+  asg_node_count   = 12
 
   depends_on = [
     aws_secretsmanager_secret_version.vault_license,
