@@ -40,3 +40,8 @@ data "aws_subnets" "public_subnets" {
     values = ["*public*"]
   }
 }
+
+data "aws_route53_zone" "zone" {
+  name         = local.r53_zone
+  private_zone = true
+}

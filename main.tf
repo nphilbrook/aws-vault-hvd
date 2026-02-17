@@ -6,7 +6,7 @@ module "vault_hvd_primary" {
   friendly_name_prefix = "vault"
   vault_fqdn           = local.vault_fqdn
   # later
-  vault_version        = "1.21.3+ent"
+  vault_version = "1.21.3+ent"
 
   #------------------------------------------------------------------------------
   # Networking
@@ -47,6 +47,14 @@ module "vault_hvd_primary" {
     aws_secretsmanager_secret_version.vault_tls_privkey,
     aws_kms_key.unseal
   ]
+}
+
+resource "aws_route53_record" "vault_primary" {
+  zone_id = data.aws_route53_zone.zone.zone_id
+  name    = local.vault_foo
+  type    = "CNAME"
+  ttl     = 300
+  records = [local.vault_fqdn]
 }
 
 # module "vault_hvd_public_private" {
