@@ -29,5 +29,8 @@ terraform {
       source  = "hashicorp/tfe"
       version = "~>0.74"
     }
+    # environment = {
+    #   source  = "EppO/environment"
+    # }
   }
 }

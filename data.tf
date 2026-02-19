@@ -1,9 +1,24 @@
 #------------------------------------------------------------------------------
+# Environment variable dump (temporary)
+#------------------------------------------------------------------------------
+# data "environment_variables" "tfe_token" {
+#   filter = "^TFE_TOKEN$"
+# }
+
+#------------------------------------------------------------------------------
 # Lab env
 #------------------------------------------------------------------------------
 data "tfe_outputs" "azure_hcp_control_outputs" {
   workspace = "azure-hcp-control"
 }
+
+# data "tfe_organization" "foo" {
+# #   name = "organization-name"
+# }
+
+# output "tfe_org_id" {
+#   value = data.tfe_organization.foo.external_id
+# }
 
 #------------------------------------------------------------------------------
 # AWS environment
