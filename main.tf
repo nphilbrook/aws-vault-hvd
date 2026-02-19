@@ -71,10 +71,10 @@ module "vault_hvd_pr" {
   net_vault_subnet_ids  = module.prereqs_use2.private_subnet_ids
   net_lb_subnet_ids     = module.prereqs_use2.private_subnet_ids
 
-  net_ingress_vault_security_group_ids = [local.bastion_security_group, module.prereqs_use2.bastion_security_group_id]
+  net_ingress_vault_security_group_ids = [module.prereqs_use2.bastion_security_group_id]
 
-  net_ingress_ssh_security_group_ids = [local.bastion_security_group, module.prereqs_use2.bastion_security_group_id]
-  net_ingress_lb_security_group_ids  = [local.bastion_security_group, module.prereqs_use2.bastion_security_group_id]
+  net_ingress_ssh_security_group_ids = [module.prereqs_use2.bastion_security_group_id]
+  net_ingress_lb_security_group_ids  = [module.prereqs_use2.bastion_security_group_id]
 
   create_route53_vault_dns_record      = true
   route53_vault_hosted_zone_name       = local.r53_zone
