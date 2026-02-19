@@ -88,8 +88,8 @@ module "prereqs_use2" {
   # --- Networking --- #
   create_vpc = true
   vpc_cidr   = "10.10.0.0/16"
-  # public_subnet_cidrs            = ["10.10.0.0/24", "10.10.1.0/24", "10.10.2.0/24"]
-  public_subnet_cidrs            = ["10.10.0.0/24"]
+  public_subnet_cidrs            = ["10.10.0.0/24", "10.10.1.0/24", "10.10.2.0/24"]
+  # public_subnet_cidrs            = ["10.10.0.0/24"]
   private_subnet_cidrs           = ["10.10.8.0/21", "10.10.16.0/21", "10.10.24.0/21"]
   create_bastion                 = true
   bastion_ec2_keypair_name       = "acme-w2"
