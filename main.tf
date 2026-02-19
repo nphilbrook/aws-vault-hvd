@@ -17,6 +17,7 @@ module "vault_hvd_primary" {
   net_lb_subnet_ids     = data.aws_subnets.private_subnets.ids
 
   net_ingress_vault_security_group_ids = [local.bastion_security_group]
+  net_ingress_vault_cidr_blocks        = [data.aws_vpc.secondary.cidr_block]
 
   net_ingress_ssh_security_group_ids = [local.bastion_security_group]
   net_ingress_lb_security_group_ids  = [local.bastion_security_group]
@@ -72,6 +73,7 @@ module "vault_hvd_pr" {
   net_lb_subnet_ids     = module.prereqs_use2.private_subnet_ids
 
   net_ingress_vault_security_group_ids = [module.prereqs_use2.bastion_security_group_id]
+  net_ingress_vault_cidr_blocks        = [data.aws_vpc.primary.cidr_block]
 
   net_ingress_ssh_security_group_ids = [module.prereqs_use2.bastion_security_group_id]
   net_ingress_lb_security_group_ids  = [module.prereqs_use2.bastion_security_group_id]

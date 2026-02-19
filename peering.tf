@@ -95,66 +95,56 @@ resource "aws_route" "secondary_to_primary" {
   vpc_peering_connection_id = aws_vpc_peering_connection.primary_to_secondary.id
 }
 
-# --- Security group: primary VPC (allow 8200/8201 from secondary CIDR) ---
-resource "aws_security_group" "vault_peering_primary" {
-  name        = "vault-peering-primary"
-  description = "Allow Vault API/cluster traffic from secondary VPC"
-  vpc_id      = local.vpc_id
+# --- Security group rules: 8201 cluster port (not handled by module CIDR input) ---
+# The module's net_ingress_vault_cidr_blocks handles 8200. For 8201 (cluster),
+# we add rules directly to each module's internal security group.
 
-  tags = merge(local.common_tags, {
-    Name = "vault-peering-primary"
-  })
+data "aws_security_group" "vault_primary_sg" {
+  filter {
+    name   = "group-name"
+    values = ["vault-sg"]
+  }
+  filter {
+    name   = "vpc-id"
+    values = [local.vpc_id]
+  }
+
+  depends_on = [module.vault_hvd_primary]
 }
 
-resource "aws_vpc_security_group_ingress_rule" "primary_8200" {
-  security_group_id = aws_security_group.vault_peering_primary.id
-  description       = "Vault API from secondary VPC"
-  cidr_ipv4         = data.aws_vpc.secondary.cidr_block
-  from_port         = 8200
-  to_port           = 8200
-  ip_protocol       = "tcp"
+data "aws_security_group" "vault_secondary_sg" {
+  provider = aws.secondary
+
+  filter {
+    name   = "group-name"
+    values = ["e2prvault-sg"]
+  }
+  filter {
+    name   = "vpc-id"
+    values = [module.prereqs_use2.vpc_id]
+  }
+
+  depends_on = [module.vault_hvd_pr]
 }
 
-resource "aws_vpc_security_group_ingress_rule" "primary_8201" {
-  security_group_id = aws_security_group.vault_peering_primary.id
-  description       = "Vault cluster from secondary VPC"
-  cidr_ipv4         = data.aws_vpc.secondary.cidr_block
+resource "aws_security_group_rule" "primary_cluster_from_secondary" {
+  type              = "ingress"
   from_port         = 8201
   to_port           = 8201
-  ip_protocol       = "tcp"
+  protocol          = "tcp"
+  cidr_blocks       = [data.aws_vpc.secondary.cidr_block]
+  description       = "Vault cluster port from secondary VPC via peering"
+  security_group_id = data.aws_security_group.vault_primary_sg.id
 }
 
-# --- Security group: secondary VPC (allow 8200/8201 from primary CIDR) ---
-resource "aws_security_group" "vault_peering_secondary" {
+resource "aws_security_group_rule" "secondary_cluster_from_primary" {
   provider = aws.secondary
 
-  name        = "vault-peering-secondary"
-  description = "Allow Vault API/cluster traffic from primary VPC"
-  vpc_id      = module.prereqs_use2.vpc_id
-
-  tags = merge(local.common_tags, {
-    Name = "vault-peering-secondary"
-  })
-}
-
-resource "aws_vpc_security_group_ingress_rule" "secondary_8200" {
-  provider = aws.secondary
-
-  security_group_id = aws_security_group.vault_peering_secondary.id
-  description       = "Vault API from primary VPC"
-  cidr_ipv4         = data.aws_vpc.primary.cidr_block
-  from_port         = 8200
-  to_port           = 8200
-  ip_protocol       = "tcp"
-}
-
-resource "aws_vpc_security_group_ingress_rule" "secondary_8201" {
-  provider = aws.secondary
-
-  security_group_id = aws_security_group.vault_peering_secondary.id
-  description       = "Vault cluster from primary VPC"
-  cidr_ipv4         = data.aws_vpc.primary.cidr_block
+  type              = "ingress"
   from_port         = 8201
   to_port           = 8201
-  ip_protocol       = "tcp"
+  protocol          = "tcp"
+  cidr_blocks       = [data.aws_vpc.primary.cidr_block]
+  description       = "Vault cluster port from primary VPC via peering"
+  security_group_id = data.aws_security_group.vault_secondary_sg.id
 }
