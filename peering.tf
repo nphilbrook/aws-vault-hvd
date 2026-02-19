@@ -76,6 +76,14 @@ resource "aws_vpc_peering_connection_options" "secondary_dns" {
   depends_on = [aws_vpc_peering_connection_accepter.secondary]
 }
 
+# --- Associate private DNS zone with secondary VPC ---
+resource "aws_route53_zone_association" "secondary" {
+  vpc_id  = module.prereqs_use2.vpc_id
+  zone_id = data.aws_route53_zone.zone.zone_id
+
+  vpc_region = local.secondary_region
+}
+
 # --- Routes: primary private subnets -> secondary VPC CIDR ---
 resource "aws_route" "primary_to_secondary" {
   for_each = toset(data.aws_route_tables.primary_private.ids)
