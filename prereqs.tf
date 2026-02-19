@@ -75,8 +75,8 @@ resource "aws_secretsmanager_secret_version" "vault_tls_privkey" {
 
 # US-EAST-2 PREREQS
 module "prereqs_use2" {
-  # source = "git@github.com:hashicorp-services/terraform-aws-prereqs?ref=main"
-  source = "git@github.com:nphilbrook/terraform-aws-prereqs?ref=nphilbrook_save_money_on_NATs"
+  source = "git@github.com:hashicorp-services/terraform-aws-prereqs?ref=main"
+  # source = "git@github.com:nphilbrook/terraform-aws-prereqs?ref=nphilbrook_save_money_on_NATs"
   providers = {
     aws = aws.secondary
   }
@@ -110,4 +110,12 @@ module "prereqs_use2" {
 
   # --- Cloudwatch Log Group --- #
   create_cloudwatch_log_group = true
+}
+
+resource "aws_kms_key" "unseal_use2" {
+  provider = aws.secondary
+
+  description             = "KMS Key for Vault auto-unseal (us-east-2)"
+  enable_key_rotation     = true
+  deletion_window_in_days = 20
 }
