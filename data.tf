@@ -1,24 +1,9 @@
 #------------------------------------------------------------------------------
-# Environment variable dump (temporary)
-#------------------------------------------------------------------------------
-# data "environment_variables" "tfe_token" {
-#   filter = "^TFE_TOKEN$"
-# }
-
-#------------------------------------------------------------------------------
 # Lab env
 #------------------------------------------------------------------------------
 data "tfe_outputs" "azure_hcp_control_outputs" {
   workspace = "azure-hcp-control"
 }
-
-# data "tfe_organization" "foo" {
-# #   name = "organization-name"
-# }
-
-# output "tfe_org_id" {
-#   value = data.tfe_organization.foo.external_id
-# }
 
 #------------------------------------------------------------------------------
 # AWS environment
@@ -66,4 +51,33 @@ data "aws_subnets" "public_subnets" {
 data "aws_route53_zone" "zone" {
   name         = local.r53_zone
   private_zone = true
+}
+
+# Blessed HC base images
+data "aws_ami" "hc_base_ubuntu_2404" {
+  filter {
+    name   = "name"
+    values = ["hc-base-ubuntu-2404-amd64-*"]
+  }
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
+  most_recent = true
+  owners      = ["888995627335"] # ami-prod account
+}
+
+data "aws_ami" "hc_base_ubuntu_2404_e2" {
+  provider = aws.secondary
+
+  filter {
+    name   = "name"
+    values = ["hc-base-ubuntu-2404-amd64-*"]
+  }
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
+  most_recent = true
+  owners      = ["888995627335"] # ami-prod account
 }
