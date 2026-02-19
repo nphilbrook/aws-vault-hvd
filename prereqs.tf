@@ -98,10 +98,15 @@ module "prereqs_use2" {
   save_money_on_nat_gateways = true
 
   # --- Secrets Manager Prereq Secrets --- #
+  # No TFE in this region (yet)
   # tfe_license_secret_value             = var.tfe_license_secret_value
   # tfe_encryption_password_secret_value = var.tfe_encryption_password_secret_value
   # tfe_database_password_secret_value   = var.tfe_database_password_secret_value
   # tfe_redis_password_secret_value      = var.tfe_redis_password_secret_value
+
+  vault_license_secret_value            = var.vault_license_secret_value
+  vault_tls_cert_secret_value_base64    = module.cert.tls_fullchain_base64
+  vault_tls_privkey_secret_value_base64 = module.cert.tls_privkey_base64
 
   # --- Cloudwatch Log Group --- #
   create_cloudwatch_log_group = true
