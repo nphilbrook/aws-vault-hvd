@@ -81,3 +81,11 @@ data "aws_ami" "hc_base_ubuntu_2404_e2" {
   most_recent = true
   owners      = ["888995627335"] # ami-prod account
 }
+
+# My bastion based on ^ above
+data "hcp_packer_artifact" "bastion" {
+  bucket_name  = "bastion"
+  channel_name = "latest"
+  platform     = "aws"
+  region       = "us-east-2"
+}

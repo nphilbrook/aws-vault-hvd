@@ -75,8 +75,8 @@ resource "aws_secretsmanager_secret_version" "vault_tls_privkey" {
 
 # US-EAST-2 PREREQS
 module "prereqs_use2" {
-  source = "git@github.com:hashicorp-services/terraform-aws-prereqs?ref=main"
-  # source = "git@github.com:nphilbrook/terraform-aws-prereqs?ref=nphilbrook_save_money_on_NATs"
+  # source = "git@github.com:hashicorp-services/terraform-aws-prereqs?ref=main"
+  source = "git@github.com:nphilbrook/terraform-aws-prereqs?ref=nphilbrook_bastion_configurable"
   providers = {
     aws = aws.secondary
   }
@@ -94,6 +94,7 @@ module "prereqs_use2" {
   create_bastion                 = true
   bastion_ec2_keypair_name       = "acme-w2"
   bastion_cidr_allow_ingress_ssh = data.tfe_outputs.azure_hcp_control_outputs.nonsensitive_values.ingress_ips
+  bastion_image_id               = data.hcp_packer_artifact.bastion.external_identifier
   # bastion_iam_instance_profile   = aws_iam_instance_profile.bastion_profile.name
   save_money_on_nat_gateways = true
 
