@@ -21,6 +21,7 @@ locals {
   # bad naming - w2 exists in e2 as well
   key_pair_name = "acme-w2"
   # Ideally pull these in from tfe-hvd outputs but :shrug:
-  vpc_id                 = "vpc-0a81d8ce35b989c3d"
-  bastion_security_group = "sg-097db6b701058a37b"
+  w2_vpc_id                 = "vpc-0a81d8ce35b989c3d"
+  w2_bastion_security_group = data.tfe_outputs.tfe_hvd.nonsensitive_values.new_bastion_sg_id
+  w2_bastion_private_ip     = data.tfe_outputs.tfe_hvd.nonsensitive_values.new_bastion_private_ip
 }

@@ -4,7 +4,7 @@
 
 # --- VPC data sources (for CIDRs) ---
 data "aws_vpc" "primary" {
-  id = local.vpc_id
+  id = local.w2_vpc_id
 }
 
 data "aws_vpc" "secondary" {
@@ -14,7 +14,7 @@ data "aws_vpc" "secondary" {
 
 # --- Route table data sources (private subnets) ---
 data "aws_route_tables" "primary_private" {
-  vpc_id = local.vpc_id
+  vpc_id = local.w2_vpc_id
 
   filter {
     name   = "association.subnet-id"
@@ -34,7 +34,7 @@ data "aws_route_tables" "secondary_private" {
 
 # --- Peering connection ---
 resource "aws_vpc_peering_connection" "primary_to_secondary" {
-  vpc_id      = local.vpc_id
+  vpc_id      = local.w2_vpc_id
   peer_vpc_id = module.prereqs_use2.vpc_id
   peer_region = local.secondary_region
   auto_accept = false
@@ -77,12 +77,13 @@ resource "aws_vpc_peering_connection_options" "secondary_dns" {
 }
 
 # --- Associate private DNS zone with secondary VPC ---
-resource "aws_route53_zone_association" "secondary" {
-  vpc_id  = module.prereqs_use2.vpc_id
-  zone_id = data.aws_route53_zone.zone.zone_id
+# MOVED TO VPC definition in tfe-hvd :notlikethis"
+# resource "aws_route53_zone_association" "secondary" {
+#   vpc_id  = module.prereqs_use2.vpc_id
+#   zone_id = data.aws_route53_zone.zone.zone_id
 
-  vpc_region = local.secondary_region
-}
+#   vpc_region = local.secondary_region
+# }
 
 # --- Routes: primary private subnets -> secondary VPC CIDR ---
 resource "aws_route" "primary_to_secondary" {
@@ -114,7 +115,7 @@ data "aws_security_group" "vault_primary_sg" {
   }
   filter {
     name   = "vpc-id"
-    values = [local.vpc_id]
+    values = [local.w2_vpc_id]
   }
 
   depends_on = [module.vault_hvd_primary]

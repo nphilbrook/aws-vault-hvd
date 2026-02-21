@@ -4,6 +4,9 @@
 data "tfe_outputs" "azure_hcp_control_outputs" {
   workspace = "azure-hcp-control"
 }
+data "tfe_outputs" "tfe_hvd" {
+  workspace = "tfe-hvd"
+}
 
 #------------------------------------------------------------------------------
 # AWS environment
@@ -29,7 +32,7 @@ data "aws_iam_session_context" "human" {
 data "aws_subnets" "private_subnets" {
   filter {
     name   = "vpc-id"
-    values = [local.vpc_id]
+    values = [local.w2_vpc_id]
   }
   filter {
     name   = "tag:Name"
@@ -40,7 +43,7 @@ data "aws_subnets" "private_subnets" {
 data "aws_subnets" "public_subnets" {
   filter {
     name   = "vpc-id"
-    values = [local.vpc_id]
+    values = [local.w2_vpc_id]
   }
   filter {
     name   = "tag:Name"

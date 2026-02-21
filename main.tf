@@ -11,17 +11,17 @@ module "vault_hvd_primary" {
   #------------------------------------------------------------------------------
   # Networking
   #------------------------------------------------------------------------------
-  net_vpc_id            = local.vpc_id
+  net_vpc_id            = local.w2_vpc_id
   load_balancing_scheme = "INTERNAL"
   net_vault_subnet_ids  = data.aws_subnets.private_subnets.ids
   net_lb_subnet_ids     = data.aws_subnets.private_subnets.ids
 
-  net_ingress_vault_security_group_ids = [local.bastion_security_group]
+  net_ingress_vault_security_group_ids = [local.w2_bastion_security_group]
   net_ingress_vault_cidr_blocks        = [data.aws_vpc.secondary.cidr_block]
 
-  net_ingress_ssh_security_group_ids = [local.bastion_security_group]
-  net_ingress_lb_security_group_ids  = [local.bastion_security_group]
-  net_ingress_lb_cidr_blocks         = [data.aws_vpc.secondary.cidr_block]
+  net_ingress_ssh_security_group_ids = [local.w2_bastion_security_group]
+  net_ingress_lb_security_group_ids  = [local.w2_bastion_security_group]
+  net_ingress_lb_cidr_blocks         = [data.aws_vpc.secondary.cidr_block, "${module.prereqs_use2.bastion_private_ip}/32"]
 
   create_route53_vault_dns_record      = true
   route53_vault_hosted_zone_name       = local.r53_zone
@@ -79,7 +79,7 @@ module "vault_hvd_pr" {
 
   net_ingress_ssh_security_group_ids = [module.prereqs_use2.bastion_security_group_id]
   net_ingress_lb_security_group_ids  = [module.prereqs_use2.bastion_security_group_id]
-  net_ingress_lb_cidr_blocks         = [data.aws_vpc.primary.cidr_block]
+  net_ingress_lb_cidr_blocks         = [data.aws_vpc.primary.cidr_block, "${local.w2_bastion_private_ip}/32"]
 
   create_route53_vault_dns_record      = true
   route53_vault_hosted_zone_name       = local.r53_zone
