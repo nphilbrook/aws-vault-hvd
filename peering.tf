@@ -32,6 +32,26 @@ data "aws_route_tables" "secondary_private" {
   }
 }
 
+# --- Route table data sources (public subnets) ---
+data "aws_route_tables" "primary_public" {
+  vpc_id = local.w2_vpc_id
+
+  filter {
+    name   = "association.subnet-id"
+    values = data.aws_subnets.public_subnets.ids
+  }
+}
+
+data "aws_route_tables" "secondary_public" {
+  provider = aws.secondary
+  vpc_id   = module.prereqs_use2.vpc_id
+
+  filter {
+    name   = "association.subnet-id"
+    values = module.prereqs_use2.public_subnet_ids
+  }
+}
+
 # --- Peering connection ---
 resource "aws_vpc_peering_connection" "primary_to_secondary" {
   vpc_id      = local.w2_vpc_id
@@ -97,6 +117,25 @@ resource "aws_route" "primary_to_secondary" {
 # --- Routes: secondary private subnets -> primary VPC CIDR ---
 resource "aws_route" "secondary_to_primary" {
   for_each = toset(data.aws_route_tables.secondary_private.ids)
+  provider = aws.secondary
+
+  route_table_id            = each.value
+  destination_cidr_block    = data.aws_vpc.primary.cidr_block
+  vpc_peering_connection_id = aws_vpc_peering_connection.primary_to_secondary.id
+}
+
+# --- Routes: primary public subnets -> secondary VPC CIDR ---
+resource "aws_route" "primary_public_to_secondary" {
+  for_each = toset(data.aws_route_tables.primary_public.ids)
+
+  route_table_id            = each.value
+  destination_cidr_block    = data.aws_vpc.secondary.cidr_block
+  vpc_peering_connection_id = aws_vpc_peering_connection.primary_to_secondary.id
+}
+
+# --- Routes: secondary public subnets -> primary VPC CIDR ---
+resource "aws_route" "secondary_public_to_primary" {
+  for_each = toset(data.aws_route_tables.secondary_public.ids)
   provider = aws.secondary
 
   route_table_id            = each.value
