@@ -87,7 +87,7 @@ data "aws_ami" "hc_base_ubuntu_2404_e2" {
 
 # My bastion based on ^ above
 data "hcp_packer_artifact" "bastion" {
-  bucket_name  = "bastion"
+  bucket_name  = "bastion-ubuntu"
   channel_name = "dev"
   platform     = "aws"
   region       = "us-east-2"
