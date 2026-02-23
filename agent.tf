@@ -47,6 +47,7 @@ resource "aws_instance" "vault_tfc_agent" {
   instance_type               = "t3a.small"
   key_name                    = local.key_pair_name
   vpc_security_group_ids      = [local.w2_bastion_security_group]
+  subnet_id                   = data.aws_subnets.public_subnets.ids[0]
 
   metadata_options {
     instance_metadata_tags = "enabled"
