@@ -28,7 +28,7 @@ module "vault_hvd_primary" {
   route53_vault_hosted_zone_name       = local.r53_zone
   route53_vault_hosted_zone_is_private = true
 
-  custom_target_group_arns = []
+  custom_target_group_arns = [aws_lb_target_group.vault_public_primary.arn]
 
   #------------------------------------------------------------------------------
   # AWS Secrets Manager installation secrets and AWS KMS unseal key
@@ -90,7 +90,7 @@ module "vault_hvd_pr" {
   route53_vault_hosted_zone_name       = local.r53_zone
   route53_vault_hosted_zone_is_private = true
 
-  custom_target_group_arns = []
+  custom_target_group_arns = [aws_lb_target_group.vault_public_pr.arn]
 
   #------------------------------------------------------------------------------
   # AWS Secrets Manager installation secrets and AWS KMS unseal key
