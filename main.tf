@@ -1,5 +1,6 @@
 module "vault_hvd_primary" {
-  source = "git@github.com:hashicorp/terraform-aws-vault-enterprise-hvd?ref=main"
+  #  source = "git@github.com:hashicorp/terraform-aws-vault-enterprise-hvd?ref=main"
+  source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=nphilbrook_custom_target_groups"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
@@ -26,6 +27,8 @@ module "vault_hvd_primary" {
   create_route53_vault_dns_record      = true
   route53_vault_hosted_zone_name       = local.r53_zone
   route53_vault_hosted_zone_is_private = true
+
+  custom_target_group_arns = []
 
   #------------------------------------------------------------------------------
   # AWS Secrets Manager installation secrets and AWS KMS unseal key
@@ -54,7 +57,8 @@ module "vault_hvd_primary" {
 }
 
 module "vault_hvd_pr" {
-  source = "git@github.com:hashicorp/terraform-aws-vault-enterprise-hvd?ref=main"
+  #source = "git@github.com:hashicorp/terraform-aws-vault-enterprise-hvd?ref=main"
+  source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=nphilbrook_custom_target_groups"
 
   providers = {
     aws = aws.secondary
@@ -85,6 +89,8 @@ module "vault_hvd_pr" {
   create_route53_vault_dns_record      = true
   route53_vault_hosted_zone_name       = local.r53_zone
   route53_vault_hosted_zone_is_private = true
+
+  custom_target_group_arns = []
 
   #------------------------------------------------------------------------------
   # AWS Secrets Manager installation secrets and AWS KMS unseal key

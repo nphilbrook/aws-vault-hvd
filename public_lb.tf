@@ -121,12 +121,12 @@ resource "aws_lb_listener" "vault_public_primary" {
 
 # ── Attach existing ASG to the public target group ────────────────────────────
 
-resource "aws_autoscaling_attachment" "vault_public_primary" {
-  autoscaling_group_name = "vault-asg"
-  lb_target_group_arn    = aws_lb_target_group.vault_public_primary.arn
+# resource "aws_autoscaling_attachment" "vault_public_primary" {
+#   autoscaling_group_name = "vault-asg"
+#   lb_target_group_arn    = aws_lb_target_group.vault_public_primary.arn
 
-  depends_on = [module.vault_hvd_primary]
-}
+#   depends_on = [module.vault_hvd_primary]
+# }
 
 #==============================================================================
 # PR CLUSTER — Public NLB (us-east-2)
@@ -226,13 +226,13 @@ resource "aws_lb_listener" "vault_public_pr" {
 
 # ── Attach existing ASG to the public target group ────────────────────────────
 
-resource "aws_autoscaling_attachment" "vault_public_pr" {
-  provider               = aws.secondary
-  autoscaling_group_name = "e2prvault-asg"
-  lb_target_group_arn    = aws_lb_target_group.vault_public_pr.arn
+# resource "aws_autoscaling_attachment" "vault_public_pr" {
+#   provider               = aws.secondary
+#   autoscaling_group_name = "e2prvault-asg"
+#   lb_target_group_arn    = aws_lb_target_group.vault_public_pr.arn
 
-  depends_on = [module.vault_hvd_pr]
-}
+#   depends_on = [module.vault_hvd_pr]
+# }
 
 #==============================================================================
 # Public Route 53 Records
