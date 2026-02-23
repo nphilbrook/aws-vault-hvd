@@ -85,6 +85,34 @@ data "aws_ami" "hc_base_ubuntu_2404_e2" {
   owners      = ["888995627335"] # ami-prod account
 }
 
+data "aws_ami" "hc_base_rhel9" {
+  filter {
+    name   = "name"
+    values = ["hc-base-rhel-9-x86_64-*"]
+  }
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
+  most_recent = true
+  owners      = ["888995627335"] # ami-prod account
+}
+
+data "aws_ami" "hc_base_rhel9_e2" {
+  provider = aws.secondary
+
+  filter {
+    name   = "name"
+    values = ["hc-base-rhel-9-x86_64-*"]
+  }
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
+  most_recent = true
+  owners      = ["888995627335"] # ami-prod account
+}
+
 # My bastion based on ^ above
 data "hcp_packer_artifact" "bastion" {
   bucket_name  = "bastion-ubuntu"
