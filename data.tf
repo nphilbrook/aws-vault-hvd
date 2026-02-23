@@ -92,3 +92,10 @@ data "hcp_packer_artifact" "bastion" {
   platform     = "aws"
   region       = "us-east-2"
 }
+
+data "hcp_packer_artifact" "bastion_rhel" {
+  bucket_name  = "bastion-rhel"
+  channel_name = "dev"
+  platform     = "aws"
+  region       = "us-west-2"
+}

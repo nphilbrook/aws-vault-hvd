@@ -92,7 +92,7 @@ module "prereqs_use2" {
   # public_subnet_cidrs            = []
   private_subnet_cidrs           = ["10.10.8.0/21", "10.10.16.0/21", "10.10.24.0/21"]
   create_bastion                 = true
-  bastion_ec2_keypair_name       = "acme-w2"
+  bastion_ec2_keypair_name       = local.key_pair_name
   bastion_cidr_allow_ingress_ssh = data.tfe_outputs.azure_hcp_control_outputs.nonsensitive_values.ingress_ips
   bastion_image_id               = data.hcp_packer_artifact.bastion.external_identifier
   # bastion_iam_instance_profile   = aws_iam_instance_profile.bastion_profile.name
