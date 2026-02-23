@@ -6,30 +6,6 @@
 # are untouched.
 #------------------------------------------------------------------------------
 
-# ── Public Route 53 zone ─────────────────────────────────────────────────────
-
-data "aws_route53_zone" "public_zone" {
-  name         = local.r53_zone
-  private_zone = false
-}
-
-# ── Data sources for module-created instance security groups ──────────────────
-
-data "aws_security_group" "vault_primary_instance_sg" {
-  name   = "vault-sg"
-  vpc_id = local.w2_vpc_id
-
-  depends_on = [module.vault_hvd_primary]
-}
-
-data "aws_security_group" "vault_pr_instance_sg" {
-  provider = aws.secondary
-  name     = "e2prvault-sg"
-  vpc_id   = module.prereqs_use2.vpc_id
-
-  depends_on = [module.vault_hvd_pr]
-}
-
 #==============================================================================
 # PRIMARY CLUSTER — Public NLB (us-west-2)
 #==============================================================================

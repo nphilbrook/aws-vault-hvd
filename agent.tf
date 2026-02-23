@@ -55,4 +55,14 @@ resource "aws_instance" "vault_tfc_agent" {
 
   user_data                   = templatefile("${path.module}/agent_user_data.tpl", { num_agents = 2 })
   user_data_replace_on_change = true
+
+  tags = { "Name" = "vaultagent" }
+}
+
+resource "aws_route53_record" "vault_agent" {
+  zone_id = data.aws_route53_zone.public_zone.zone_id
+  name    = "vaultagent.${data.aws_route53_zone.public_zone.name}"
+  type    = "A"
+  ttl     = 300
+  records = [aws_instance.vault_tfc_agent.public_ip]
 }
