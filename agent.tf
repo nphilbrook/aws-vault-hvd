@@ -40,7 +40,7 @@ resource "aws_iam_instance_profile" "agent_profile" {
   role = aws_iam_role.agent_role.name
 }
 
-resource "aws_instance" "jump_w2" {
+resource "aws_instance" "vault_tfc_agent" {
   ami                         = data.hcp_packer_artifact.bastion_rhel.external_identifier
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.agent_profile.name
