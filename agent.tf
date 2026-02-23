@@ -40,13 +40,6 @@ resource "aws_iam_instance_profile" "agent_profile" {
   role = aws_iam_role.agent_role.name
 }
 
-data "aws_security_group" "bastion_sg" {
-  filter {
-    name   = "group-name"
-    values = ["agent-sg"]
-  }
-}
-
 resource "aws_instance" "jump_w2" {
   ami                         = data.hcp_packer_artifact.bastion_rhel.external_identifier
   associate_public_ip_address = true
