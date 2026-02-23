@@ -20,12 +20,12 @@ data "aws_iam_policy_document" "agent_policy" {
 }
 
 resource "aws_iam_policy" "agent_policy" {
-  name   = "agent_policy"
+  name   = "vault-agent-policy"
   policy = data.aws_iam_policy_document.agent_policy.json
 }
 
 resource "aws_iam_role" "agent_role" {
-  name               = "agent_role"
+  name               = "vault-agent-role"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.agent_assume_policy.json
 }
@@ -36,7 +36,7 @@ resource "aws_iam_role_policy_attachment" "agent_policy_attachment" {
 }
 
 resource "aws_iam_instance_profile" "agent_profile" {
-  name = "agent_profile"
+  name = "vault-agent-profile"
   role = aws_iam_role.agent_role.name
 }
 
