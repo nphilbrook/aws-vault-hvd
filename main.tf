@@ -100,7 +100,7 @@ module "vault_hvd_pr" {
   #------------------------------------------------------------------------------
   vm_key_pair_name = local.key_pair_name
   vm_instance_type = "t3a.medium"
-  asg_node_count   = 12
+  asg_node_count   = 6
   vm_image_id      = data.aws_ami.hc_base_rhel9_e2.id
   ec2_os_distro    = "rhel"
 
