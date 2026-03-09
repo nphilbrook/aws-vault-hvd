@@ -1,6 +1,6 @@
 module "vault_hvd_primary" {
-  #  source = "git@github.com:hashicorp/terraform-aws-vault-enterprise-hvd?ref=main"
-  source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=nphilbrook_custom_target_groups"
+   source = "git@github.com:hashicorp/terraform-aws-vault-enterprise-hvd?ref=main"
+  # source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=nphilbrook_custom_target_groups"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
@@ -13,7 +13,7 @@ module "vault_hvd_primary" {
   # Networking
   #------------------------------------------------------------------------------
   net_vpc_id            = local.w2_vpc_id
-  load_balancing_scheme = "INTERNAL"
+  load_balancing_scheme = "EXTERNAL"
   net_vault_subnet_ids  = data.aws_subnets.private_subnets.ids
   net_lb_subnet_ids     = data.aws_subnets.private_subnets.ids
 
@@ -22,13 +22,14 @@ module "vault_hvd_primary" {
 
   net_ingress_ssh_security_group_ids = [local.w2_bastion_security_group]
   net_ingress_lb_security_group_ids  = [local.w2_bastion_security_group]
-  net_ingress_lb_cidr_blocks         = [data.aws_vpc.secondary.cidr_block] #, "${module.prereqs_use2.bastion_private_ip}/32"] Shouldn't be needed - subset of total VPC CIDR
+  net_ingress_lb_cidr_blocks         = concat([data.aws_vpc.secondary.cidr_block], var.public_lb_ingress_ips)
 
   create_route53_vault_dns_record      = true
   route53_vault_hosted_zone_name       = local.r53_zone
-  route53_vault_hosted_zone_is_private = true
+  route53_vault_hosted_zone_is_private = false
 
-  custom_target_group_arns = [aws_lb_target_group.vault_public_primary.arn]
+  # From a fork that allows dual private/public LBs
+  # custom_target_group_arns = [aws_lb_target_group.vault_public_primary.arn]
 
   #------------------------------------------------------------------------------
   # AWS Secrets Manager installation secrets and AWS KMS unseal key
@@ -57,8 +58,8 @@ module "vault_hvd_primary" {
 }
 
 module "vault_hvd_pr" {
-  #source = "git@github.com:hashicorp/terraform-aws-vault-enterprise-hvd?ref=main"
-  source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=nphilbrook_custom_target_groups"
+  source = "git@github.com:hashicorp/terraform-aws-vault-enterprise-hvd?ref=main"
+  # source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=nphilbrook_custom_target_groups"
 
   providers = {
     aws = aws.secondary
@@ -75,7 +76,7 @@ module "vault_hvd_pr" {
   # Networking
   #------------------------------------------------------------------------------
   net_vpc_id            = module.prereqs_use2.vpc_id
-  load_balancing_scheme = "INTERNAL"
+  load_balancing_scheme = "EXTERNAL"
   net_vault_subnet_ids  = module.prereqs_use2.private_subnet_ids
   net_lb_subnet_ids     = module.prereqs_use2.private_subnet_ids
 
@@ -84,13 +85,14 @@ module "vault_hvd_pr" {
 
   net_ingress_ssh_security_group_ids = [module.prereqs_use2.bastion_security_group_id]
   net_ingress_lb_security_group_ids  = [module.prereqs_use2.bastion_security_group_id]
-  net_ingress_lb_cidr_blocks         = [data.aws_vpc.primary.cidr_block] #, "${local.w2_bastion_private_ip}/32"] shouldn't be needed, subset of full VPC CIDR
+  net_ingress_lb_cidr_blocks         = concat([data.aws_vpc.primary.cidr_block], var.public_lb_ingress_ips)
 
   create_route53_vault_dns_record      = true
   route53_vault_hosted_zone_name       = local.r53_zone
-  route53_vault_hosted_zone_is_private = true
+  route53_vault_hosted_zone_is_private = false
 
-  custom_target_group_arns = [aws_lb_target_group.vault_public_pr.arn]
+  # From a fork that allows dual private/public LBs
+  # custom_target_group_arns = [aws_lb_target_group.vault_public_pr.arn]
 
   #------------------------------------------------------------------------------
   # AWS Secrets Manager installation secrets and AWS KMS unseal key
