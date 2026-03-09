@@ -1,5 +1,5 @@
 module "vault_hvd_primary" {
-   source = "git@github.com:hashicorp/terraform-aws-vault-enterprise-hvd?ref=main"
+  source = "git@github.com:hashicorp/terraform-aws-vault-enterprise-hvd?ref=feat/add-8201-listener"
   # source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=nphilbrook_custom_target_groups"
   #------------------------------------------------------------------------------
   # Common
@@ -58,7 +58,7 @@ module "vault_hvd_primary" {
 }
 
 module "vault_hvd_pr" {
-  source = "git@github.com:hashicorp/terraform-aws-vault-enterprise-hvd?ref=main"
+  source = "git@github.com:hashicorp/terraform-aws-vault-enterprise-hvd?ref=feat/add-8201-listener"
   # source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=nphilbrook_custom_target_groups"
 
   providers = {
