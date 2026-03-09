@@ -120,7 +120,7 @@ module "vault_hvd_pr" {
 
 # Must be manually repointed in the case of a failover
 resource "aws_route53_record" "vault_cname" {
-  zone_id = data.aws_route53_zone.zone.zone_id
+  zone_id = data.aws_route53_zone.public_zone.zone_id
   name    = local.vault_fqdn
   type    = "CNAME"
   ttl     = 300
