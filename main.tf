@@ -62,16 +62,25 @@ module "vault_hvd_primary" {
 }
 
 # Needed to enable ingress from bastion host to public LB on port 8201
-resource "aws_security_group_rule" "primary_cluster_cluster_from_bastion" {
+# resource "aws_security_group_rule" "primary_cluster_cluster_from_bastion" {
+#   type              = "ingress"
+#   from_port         = 8201
+#   to_port           = 8201
+#   protocol          = "tcp"
+#   cidr_blocks       = ["35.88.147.34/32"]
+#   description       = "Vault cluster port from bastion host"
+#   security_group_id = data.aws_security_group.vault_primary_sg.id
+# }
+
+resource "aws_security_group_rule" "primary_cluster_lb_cluster_from_bastion" {
   type              = "ingress"
   from_port         = 8201
   to_port           = 8201
   protocol          = "tcp"
   cidr_blocks       = ["35.88.147.34/32"]
   description       = "Vault cluster port from bastion host"
-  security_group_id = data.aws_security_group.vault_primary_sg.id
+  security_group_id = module.vault_hvd_primary.vault_load_balancer_security_group_id
 }
-
 
 module "vault_hvd_pr" {
   source = "git@github.com:hashicorp/terraform-aws-vault-enterprise-hvd?ref=feat/add-8201-listener"
