@@ -51,10 +51,10 @@ data "aws_subnets" "public_subnets" {
   }
 }
 
-data "aws_route53_zone" "zone" {
-  name         = local.r53_zone
-  private_zone = true
-}
+# data "aws_route53_zone" "zone" {
+#   name         = local.r53_zone
+#   private_zone = true
+# }
 
 # ── Public Route 53 zone ─────────────────────────────────────────────────────
 
