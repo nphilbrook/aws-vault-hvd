@@ -30,7 +30,7 @@ module "vault_hvd_primary" {
 
   # Testing cluster API LB
   enable_vault_cluster_port_listener = true
-  net_ingress_lb_cluster_cidr_blocks = [data.aws_vpc.secondary.cidr_block]
+  net_ingress_lb_cluster_cidr_blocks = [data.aws_vpc.secondary.cidr_block, data.aws_vpc.primary.cidr_block]
 
   # From a fork that allows dual private/public LBs
   # custom_target_group_arns = [aws_lb_target_group.vault_public_primary.arn]
@@ -97,7 +97,7 @@ module "vault_hvd_pr" {
 
   # Testing cluster API LB
   enable_vault_cluster_port_listener = true
-  net_ingress_lb_cluster_cidr_blocks = [data.aws_vpc.primary.cidr_block]
+  net_ingress_lb_cluster_cidr_blocks = [data.aws_vpc.primary.cidr_block, data.aws_vpc.secondary.cidr_block]
 
   # From a fork that allows dual private/public LBs
   # custom_target_group_arns = [aws_lb_target_group.vault_public_pr.arn]
