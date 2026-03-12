@@ -75,8 +75,8 @@ resource "aws_secretsmanager_secret_version" "vault_tls_privkey" {
 
 # US-EAST-2 PREREQS
 module "prereqs_use2" {
-  # source = "git@github.com:hashicorp-services/terraform-aws-prereqs?ref=main"
-  source = "git@github.com:nphilbrook/terraform-aws-prereqs?ref=nphilbrook_bastion_configurable"
+  source = "git@github.com:hashicorp-services/terraform-aws-prereqs?ref=feature/hcp-terraform-variable-sets"
+  # source = "git@github.com:nphilbrook/terraform-aws-prereqs?ref=nphilbrook_bastion_configurable"
   providers = {
     aws = aws.secondary
   }
@@ -111,6 +111,21 @@ module "prereqs_use2" {
 
   # --- Cloudwatch Log Group --- #
   create_cloudwatch_log_group = true
+
+  create_tfe_project_variable_set     = true
+  tfe_organization                    = var.tf_organization
+  tfe_project_id                      = "prj-T1w483Z77MDcnQfM"
+  publish_project_vs_vpc              = true
+  publish_project_vs_bastion          = true
+  publish_project_vs_ssh_keypair      = true
+  publish_project_vs_kms_cmk          = true
+  publish_project_vs_cloudwatch       = true
+  publish_project_vs_tfe_secrets      = true
+  publish_project_vs_nomad_secrets    = true
+  publish_project_vs_vault_secrets    = true
+  publish_project_vs_boundary_secrets = true
+  publish_project_vs_consul_secrets   = true
+
 }
 
 resource "aws_kms_key" "unseal_use2" {

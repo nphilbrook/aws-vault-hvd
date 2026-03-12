@@ -18,5 +18,5 @@ provider "acme" {
 }
 
 provider "tfe" {
-  organization = "philbrook"
+  organization = var.tf_organization
 }

@@ -13,3 +13,7 @@ variable "public_lb_ingress_ips" {
   type        = list(string)
   default     = []
 }
+variable "tf_organization" {
+  type    = string
+  default = "philbrook"
+}
