@@ -1,5 +1,5 @@
 module "vault_hvd_primary" {
-  source = "git@github.com:hashicorp/terraform-aws-vault-enterprise-hvd?ref=feat/add-8201-listener"
+  source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=nphilbrook_route53_internal_zone_vpc_filter"
   # source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=nphilbrook_custom_target_groups"
   #------------------------------------------------------------------------------
   # Common
@@ -83,7 +83,7 @@ resource "aws_security_group_rule" "primary_cluster_lb_cluster_from_bastion" {
 }
 
 module "vault_hvd_pr" {
-  source = "git@github.com:hashicorp/terraform-aws-vault-enterprise-hvd?ref=feat/add-8201-listener"
+  source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=nphilbrook_route53_internal_zone_vpc_filter"
   # source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=nphilbrook_custom_target_groups"
 
   providers = {
