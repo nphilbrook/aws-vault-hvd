@@ -233,3 +233,65 @@
 # }
 
 # END Testing of public/private combos
+
+module "vault_hvd_foo" {
+  source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=nphilbrook_partition_placement_groups"
+  # source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=nphilbrook_custom_target_groups"
+  #------------------------------------------------------------------------------
+  # Common
+  #------------------------------------------------------------------------------
+  friendly_name_prefix = "vault-foo"
+  vault_fqdn           = local.vault_foo
+  # later
+  vault_version = "1.21.3+ent"
+
+  #------------------------------------------------------------------------------
+  # Networking
+  #------------------------------------------------------------------------------
+  net_vpc_id            = local.w2_vpc_id
+  load_balancing_scheme = "EXTERNAL"
+  net_vault_subnet_ids  = data.aws_subnets.private_subnets.ids[0]
+  net_lb_subnet_ids     = data.aws_subnets.public_subnets.ids[0]
+
+  net_ingress_vault_security_group_ids = [local.w2_bastion_security_group]
+  net_ingress_vault_cidr_blocks        = [data.aws_vpc.secondary.cidr_block]
+
+  net_ingress_ssh_security_group_ids = [local.w2_bastion_security_group]
+  net_ingress_lb_security_group_ids  = [local.w2_bastion_security_group]
+  net_ingress_lb_cidr_blocks         = concat([data.aws_vpc.secondary.cidr_block], local.public_lb_ingress_cidrs)
+
+  create_route53_vault_dns_record      = true
+  route53_vault_hosted_zone_name       = local.r53_zone
+  route53_vault_hosted_zone_is_private = false
+
+  # Testing cluster API LB
+  enable_vault_cluster_port_listener = true
+  net_ingress_lb_cluster_cidr_blocks = [data.aws_vpc.secondary.cidr_block, data.aws_vpc.primary.cidr_block]
+
+  #------------------------------------------------------------------------------
+  # AWS Secrets Manager installation secrets and AWS KMS unseal key
+  #------------------------------------------------------------------------------
+  sm_vault_license_arn      = aws_secretsmanager_secret.vault_license.arn
+  sm_vault_tls_cert_arn     = aws_secretsmanager_secret.vault_tls_cert.arn
+  sm_vault_tls_cert_key_arn = aws_secretsmanager_secret.vault_tls_privkey.arn
+  sm_vault_tls_ca_bundle    = null # publicly trusted cert from Let's Encrypt, so no CA bundle
+  vault_seal_awskms_key_arn = aws_kms_key.unseal.arn
+
+  #------------------------------------------------------------------------------
+  # Compute
+  #------------------------------------------------------------------------------
+  vm_key_pair_name                = local.key_pair_name
+  vm_instance_type                = "t3a.medium"
+  asg_node_count                  = 6
+  vm_image_id                     = data.aws_ami.hc_base_rhel9.id
+  ec2_os_distro                   = "rhel"
+  placement_group_strategy        = "partition"
+  placement_group_partition_count = 3
+
+  depends_on = [
+    aws_secretsmanager_secret_version.vault_license,
+    aws_secretsmanager_secret_version.vault_tls_cert,
+    aws_secretsmanager_secret_version.vault_tls_privkey,
+    aws_kms_key.unseal
+  ]
+}

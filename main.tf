@@ -1,5 +1,5 @@
 module "vault_hvd_primary" {
-  source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=nphilbrook_partition_placement_groups"
+  source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=main"
   # source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=nphilbrook_custom_target_groups"
   #------------------------------------------------------------------------------
   # Common
@@ -52,8 +52,6 @@ module "vault_hvd_primary" {
   asg_node_count   = 6
   vm_image_id      = data.aws_ami.hc_base_rhel9.id
   ec2_os_distro    = "rhel"
-  # placement_group_strategy = "partition"
-  # placement_group_partition_count = 3
 
   depends_on = [
     aws_secretsmanager_secret_version.vault_license,
@@ -85,7 +83,7 @@ resource "aws_security_group_rule" "primary_cluster_lb_cluster_from_bastion" {
 }
 
 module "vault_hvd_pr" {
-  source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=nphilbrook_partition_placement_groups"
+  source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=main"
   # source = "git@github.com:nphilbrook/terraform-aws-vault-enterprise-hvd?ref=nphilbrook_custom_target_groups"
 
   providers = {
@@ -142,8 +140,6 @@ module "vault_hvd_pr" {
   asg_node_count   = 6
   vm_image_id      = data.aws_ami.hc_base_rhel9_e2.id
   ec2_os_distro    = "rhel"
-  # placement_group_strategy = "cluster"
-  # placement_group_partition_count = 3
 
   depends_on = [
     module.prereqs_use2,
