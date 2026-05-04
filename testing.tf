@@ -250,8 +250,8 @@ module "vault_hvd_foo" {
   #------------------------------------------------------------------------------
   net_vpc_id            = local.w2_vpc_id
   load_balancing_scheme = "EXTERNAL"
-  net_vault_subnet_ids  = data.aws_subnets.private_subnets.ids[0]
-  net_lb_subnet_ids     = data.aws_subnets.public_subnets.ids[0]
+  net_vault_subnet_ids  = [data.aws_subnets.private_subnets.ids[0]]
+  net_lb_subnet_ids     = [data.aws_subnets.public_subnets.ids[0]]
 
   net_ingress_vault_security_group_ids = [local.w2_bastion_security_group]
   net_ingress_vault_cidr_blocks        = [data.aws_vpc.secondary.cidr_block]
