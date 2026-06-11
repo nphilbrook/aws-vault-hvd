@@ -51,6 +51,7 @@ resource "aws_instance" "vault_tfc_agent" {
 
   metadata_options {
     instance_metadata_tags = "enabled"
+    http_tokens            = "required"
   }
 
   user_data                   = templatefile("${path.module}/agent_user_data.tpl", { num_agents = 2 })
