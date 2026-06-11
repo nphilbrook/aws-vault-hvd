@@ -13,9 +13,12 @@ data "aws_iam_policy_document" "agent_assume_policy" {
 
 data "aws_iam_policy_document" "agent_policy" {
   statement {
-    effect    = "Allow"
-    actions   = ["secretsmanager:GetSecretValue"]
-    resources = ["*"]
+    effect  = "Allow"
+    actions = ["secretsmanager:GetSecretValue"]
+    resources = [
+      aws_secretsmanager_secret.mysql_master_password.arn,
+      "arn:aws:secretsmanager:us-west-2:590184029125:secret:philbrook-aws-vault-hvd-appdb-master-password-sPWBLb",
+    ]
   }
 }
 

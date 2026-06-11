@@ -7,7 +7,7 @@ cat <<'EOF' > /usr/local/bin/tfc-agent-wrapper
 
 set -e
 
-SECRET_DATA=$(aws secretsmanager get-secret-value --secret-id vault-lab-tfc-agent-tokne)
+SECRET_DATA=$(aws secretsmanager get-secret-value --secret-id vault-lab-tfc-agent-token)
 
 export TFC_AGENT_TOKEN=$(echo $SECRET_DATA | jq -r .SecretString)
 export TFC_AGENT_NAME=$(hostname)-$1
