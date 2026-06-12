@@ -24,12 +24,14 @@ resource "aws_security_group" "mysql" {
   })
 }
 
-resource "aws_security_group_rule" "mysql_ingress_from_secondary" {
+resource "aws_security_group_rule" "mysql_ingress" {
   type              = "ingress"
   from_port         = 3306
   to_port           = 3306
   protocol          = "tcp"
-  cidr_blocks       = [data.aws_vpc.primary.cidr_block, data.aws_vpc.secondary.cidr_block]
+  # cidr_blocks       = [data.aws_vpc.primary.cidr_block, data.aws_vpc.secondary.cidr_block]
+  # testing access *ONLY* from the secondary VPC
+  cidr_blocks       = [data.aws_vpc.secondary.cidr_block]
   description       = "Allow MySQL access from both primary and secondary VPCs"
   security_group_id = aws_security_group.mysql.id
 }
